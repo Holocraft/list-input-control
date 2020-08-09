@@ -1,0 +1,46 @@
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+.ctn {
+  display: flex;
+  flex-direction: column;
+  padding: 5rem 5rem 1rem 5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-ctn {
+  margin: auto;
+}
+
+input {
+  margin: 10px;
+  font-size: 1rem;
+  border-bottom: 2px solid darkcyan;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+input:focus {
+  outline-width: 0;
+}
+
+.label {
+  margin: 10px 390px 10px 10px;
+}
+
+.list-item {
+  display: flex;
+  flex-direction: column;
+  margin-left: 80px;
+}
+
+.error-ctn {
+  color: red;
+}
