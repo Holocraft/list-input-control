@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { DragDropContext } from 'react-beautiful-dnd';
 import ListItems from './ListItems';
 
 const Container = styled.div`
@@ -64,6 +65,14 @@ const ErrorContainer = styled.div`
   margin-left: 10px;
 `;
 
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
 class ListInputControl extends Component {
   constructor(props) {
     super(props);
@@ -78,6 +87,24 @@ class ListInputControl extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.clearAllItems = this.clearAllItems.bind(this);
+    this.onDragEnd = this.onDragEnd.bind(this);
+  }
+
+  onDragEnd(result) {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const items = reorder(
+      this.state.items,
+      result.source.index,
+      result.destination.index
+    );
+
+    this.setState({
+      items,
+    });
   }
 
   decrementMax() {
@@ -119,28 +146,30 @@ class ListInputControl extends Component {
   render() {
     return (
       <Container>
-        <div>
-          <Form onSubmit={this.handleSubmit}>
-            <Label>{this.props.label}</Label>
-            <Input
-              type="text"
-              placeholder={this.props.placeholder}
-              disabled={this.props.disabled}
-              onChange={this.handleChange}
-              value={this.state.value}
-            />
-          </Form>
-        </div>
-        {this.state.items.length > 0 && (
-          <ButtonContainer>
-            <Button onClick={this.clearAllItems}>Clear List</Button>
-          </ButtonContainer>
-        )}
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <div>
+            <Form onSubmit={this.handleSubmit}>
+              <Label>{this.props.label}</Label>
+              <Input
+                type="text"
+                placeholder={this.props.placeholder}
+                disabled={this.props.disabled}
+                onChange={this.handleChange}
+                value={this.state.value}
+              />
+            </Form>
+          </div>
+          {this.state.items.length > 0 && (
+            <ButtonContainer>
+              <Button onClick={this.clearAllItems}>Clear List</Button>
+            </ButtonContainer>
+          )}
 
-        <ErrorContainer>{this.state.error}</ErrorContainer>
-        <ListContainer>
-          <ListItems items={this.state.items} />
-        </ListContainer>
+          <ErrorContainer>{this.state.error}</ErrorContainer>
+          <ListContainer>
+            <ListItems items={this.state.items} />
+          </ListContainer>
+        </DragDropContext>
       </Container>
     );
   }
