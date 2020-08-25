@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import ListInputControl from './components/ListInputControl';
 import { DragDropContext } from 'react-beautiful-dnd';
-import './App.css';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 class App extends Component {
   onDragEnd(result) {
@@ -10,17 +15,17 @@ class App extends Component {
 
   render() {
     return (
-      <div className="app">
+      <Container>
         <DragDropContext onDragEnd={this.onDragEnd}>
           <ListInputControl
-            label="Title"
+            label="Awesome Title"
             placeholder="Enter text here"
             required
             max={5}
             className="list-items"
           />
         </DragDropContext>
-      </div>
+      </Container>
     );
   }
 }

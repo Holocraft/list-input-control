@@ -1,6 +1,68 @@
 import React, { Component } from 'react';
-
+import styled from 'styled-components';
 import ListItems from './ListItems';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 5rem 5rem 1rem 5rem;
+`;
+
+const ListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2rem 1rem 2rem;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
+`;
+
+const Button = styled.button`
+  font-family: 'Roboto', sans-serif;
+  width: 100px;
+  font-weight: 600;
+  padding: 7px;
+  color: white;
+  background-color: #00ccfd;
+  box-shadow: 0px 8px 15px rgba(0, 204, 253, 0.1);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  border: none;
+  border-radius: 20px;
+  :focus {
+    outline: 0;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Input = styled.input`
+  :focus {
+    outline-width: 0;
+  }
+  margin: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 20px;
+  padding: 12px;
+`;
+
+const Label = styled.div`
+  font-size: 1.5rem;
+  color: white;
+  margin: 10px 390px 10px 10px;
+`;
+
+const ErrorContainer = styled.div`
+  color: red;
+  margin-left: 10px;
+`;
 
 class ListInputControl extends Component {
   constructor(props) {
@@ -15,6 +77,7 @@ class ListInputControl extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.clearAllItems = this.clearAllItems.bind(this);
   }
 
   decrementMax() {
@@ -28,6 +91,10 @@ class ListInputControl extends Component {
 
   handleChange(e) {
     this.setState({ value: e.target.value });
+  }
+
+  clearAllItems() {
+    this.setState({ items: [], max: this.props.max });
   }
 
   handleSubmit(e) {
@@ -51,24 +118,30 @@ class ListInputControl extends Component {
 
   render() {
     return (
-      <div className="ctn">
-        <div className="form-ctn">
-          <form onSubmit={this.handleSubmit}>
-            <div className="label">{this.props.label}</div>
-            <input
+      <Container>
+        <div>
+          <Form onSubmit={this.handleSubmit}>
+            <Label>{this.props.label}</Label>
+            <Input
               type="text"
               placeholder={this.props.placeholder}
               disabled={this.props.disabled}
               onChange={this.handleChange}
               value={this.state.value}
             />
-          </form>
+          </Form>
         </div>
-        <div className="error-ctn">{this.state.error}</div>
-        <div className="ctn">
+        {this.state.items.length > 0 && (
+          <ButtonContainer>
+            <Button onClick={this.clearAllItems}>Clear List</Button>
+          </ButtonContainer>
+        )}
+
+        <ErrorContainer>{this.state.error}</ErrorContainer>
+        <ListContainer>
           <ListItems items={this.state.items} />
-        </div>
-      </div>
+        </ListContainer>
+      </Container>
     );
   }
 }
